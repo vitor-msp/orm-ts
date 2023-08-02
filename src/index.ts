@@ -8,9 +8,9 @@ const orm = new ORM();
   orm
     .createTable("products")
     .field({ name: "id", type: "number", nullable: false, pk: true })
-    .field({ name: "name", type: "text", nullable: false })
+    .field({ name: "name", type: "string", nullable: false })
     .field({ name: "value", type: "number", nullable: false })
-    .field({ name: "unit", type: "text", nullable: false });
+    .field({ name: "unit", type: "string", nullable: false });
   console.log(orm.getTable("products"));
 })();
 /* returns: 
@@ -18,9 +18,9 @@ const orm = new ORM();
     tableName: "products",
     fields: [
         { name: "id", type: "number", nullable: false, pk: true },
-        { name: "name", type: "text", nullable: false },
+        { name: "name", type: "string", nullable: false },
         { name: "value", type: "number", nullable: false },
-        { name: "unit", type: "text", nullable: false }
+        { name: "unit", type: "string", nullable: false }
     ]
 }
 */
