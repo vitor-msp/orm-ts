@@ -8,7 +8,7 @@ const config: Config = {
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   preset: "ts-jest",
-  testMatch: ["**/?(*.)+(spec|test).[tj]s?(x)"],
+  testMatch: ["**/?(*.)+(spec|test).[t]s?(x)"],
 };
 
 export default config;
