@@ -12,7 +12,7 @@ describe("unit tests for Registry class", () => {
     const data: any = {
       name: "registry",
     };
-    const registry = RegistryBuilder.build(schema, data);
+    const registry = RegistryBuilder.build(schema, data, 1);
     expect(registry.id).toEqual(1);
     expect(registry.name).toEqual("registry");
     expect(registry.age).toBeUndefined();
@@ -23,11 +23,11 @@ describe("unit tests for Registry class", () => {
       name: "registry",
       age: "age",
     };
-    expect(() => RegistryBuilder.build(schema, data)).toThrow(Error);
+    expect(() => RegistryBuilder.build(schema, data, 1)).toThrow(Error);
   });
 
   test("ensure throw error when name is not passed", () => {
     const data: any = {};
-    expect(() => RegistryBuilder.build(schema, data)).toThrow(Error);
+    expect(() => RegistryBuilder.build(schema, data, 1)).toThrow(Error);
   });
 });

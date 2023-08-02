@@ -2,6 +2,18 @@ import { FieldProps } from "./Field";
 import { Table } from "./Table";
 
 describe("integration tests for Table class", () => {
+  const generateTable = (): Table => {
+    const table = new Table("table")
+      .field({ name: "id", type: "number", pk: true })
+      .field({ name: "name", type: "string", nullable: false })
+      .field({ name: "age", type: "number" });
+    table.insert({
+      name: "name",
+      age: 24,
+    });
+    return table;
+  };
+
   test("ensure add field to table", () => {
     const fieldProps: FieldProps = {
       name: "id",
@@ -34,5 +46,31 @@ describe("integration tests for Table class", () => {
     expect(registries[0].id).toEqual(1);
     expect(registries[0].name).toEqual(data.name);
     expect(registries[0].age).toEqual(data.age);
+  });
+
+  test("ensure select show only selected fields", () => {
+    const table = generateTable();
+    let response: string;
+    response = table.select(1, { id: false, name: true, age: true });
+    expect(response).toEqual(
+      JSON.stringify({
+        name: "name",
+        age: 24,
+      })
+    );
+    response = table.select(1, { name: true, age: true });
+    expect(response).toEqual(
+      JSON.stringify({
+        name: "name",
+        age: 24,
+        id: 1,
+      })
+    );
+  });
+
+  test("ensure that select not found inexistent registry", () => {
+    const table = generateTable();
+    const response = table.select(2, {});
+    expect(response).toEqual("");
   });
 });

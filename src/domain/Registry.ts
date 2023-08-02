@@ -1,16 +1,10 @@
 import { Field } from "./Field";
+import { Table } from "./Table";
 
 export type Registry = any;
 
 export abstract class RegistryBuilder {
-  private static currentId: number = 1;
-
-  private static getNextId(): number {
-    const id = RegistryBuilder.currentId++;
-    return id;
-  }
-
-  static build(schema: Field[], data: any): Registry {
+  static build(schema: Field[], data: any, id: number): Registry {
     const registry: Registry = {};
     schema.forEach(({ name, nullable, pk, type }) => {
       if (pk) return;
@@ -22,7 +16,7 @@ export abstract class RegistryBuilder {
       if ((typeof fieldData).localeCompare(type) !== 0) throw new Error();
       registry[name] = fieldData;
     });
-    registry.id = RegistryBuilder.getNextId();
+    registry.id = id;
     return registry;
   }
 }

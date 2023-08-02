@@ -6,6 +6,7 @@ export class Table {
   readonly tableName: string;
   private readonly fields: Field[] = [];
   private readonly registries: Registry[] = [];
+  private currentId: number = 1;
 
   constructor(tableName: string) {
     this.tableName = tableName;
@@ -18,7 +19,8 @@ export class Table {
   }
 
   insert(dto: any): string {
-    const registry = RegistryBuilder.build(this.fields, dto);
+    const id = this.getNextId();
+    const registry = RegistryBuilder.build(this.fields, dto, id);
     this.registries.push(registry);
     return "1 line affected";
   }
@@ -26,12 +28,10 @@ export class Table {
   select(id: number, show: any): string {
     const registry = this.find(id);
     if (!registry) return "";
-    const registryView: any = {};
+    const registryView: any = { ...registry };
     const showMap = ObjToMap.convert<boolean>(show);
     showMap.forEach((value, key) => {
-      if (!value) return;
-      const fieldToShow = registry[key];
-      registryView[key] = fieldToShow;
+      if (!value) delete registryView[key];
     });
     return JSON.stringify(registryView);
   }
@@ -68,5 +68,9 @@ export class Table {
 
   private find(id: number): any {
     return this.registries.find((registry) => registry.id === id);
+  }
+
+  private getNextId(): number {
+    return this.currentId++;
   }
 }
