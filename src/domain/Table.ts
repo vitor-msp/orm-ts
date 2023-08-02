@@ -3,7 +3,7 @@ import { Field, FieldProps } from "./Field";
 import { Registry, RegistryBuilder } from "./Registry";
 
 export class Table {
-  private tableName: string;
+  readonly tableName: string;
   private readonly fields: Field[] = [];
   private readonly registries: Registry[] = [];
 
@@ -17,18 +17,10 @@ export class Table {
     return this;
   }
 
-  getTableName(): string {
-    return this.tableName;
-  }
-
   insert(dto: any): string {
     const registry = RegistryBuilder.build(this.fields, dto);
     this.registries.push(registry);
     return "1 line affected";
-  }
-
-  private find(id: number): any {
-    return this.registries.find((registry) => registry.id === id);
   }
 
   select(id: number, show: any): string {
@@ -64,5 +56,17 @@ export class Table {
   selectMany(): string {
     const registries = this.registries.map((r) => r);
     return JSON.stringify(registries);
+  }
+
+  getFields(): Field[] {
+    return this.fields;
+  }
+
+  getRegistries(): Registry[] {
+    return this.registries;
+  }
+
+  private find(id: number): any {
+    return this.registries.find((registry) => registry.id === id);
   }
 }

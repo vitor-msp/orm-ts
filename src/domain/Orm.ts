@@ -18,7 +18,7 @@ export class ORM {
 
   table(tableName: string): Table {
     const table = this.tables.find(
-      (table) => table.getTableName().localeCompare(tableName) === 0
+      (table) => table.tableName.localeCompare(tableName) === 0
     );
     if (!table) throw new Error();
     return table;

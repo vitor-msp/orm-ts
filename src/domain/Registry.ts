@@ -13,7 +13,6 @@ export abstract class RegistryBuilder {
   static build(schema: Field[], data: any): Registry {
     const registry: Registry = {};
     schema.forEach(({ name, nullable, pk, type }) => {
-      console.log({ name, nullable, pk, type });
       if (pk) return;
       const fieldData = data[name];
       if (!fieldData && nullable) {
