@@ -13,8 +13,14 @@ export abstract class RegistryBuilder {
   static build(schema: Field[], data: any): Registry {
     const registry: Registry = {};
     schema.forEach(({ name, nullable, pk, type }) => {
+      console.log({ name, nullable, pk, type });
+      if (pk) return;
       const fieldData = data[name];
-      // validations
+      if (!fieldData && nullable) {
+        registry[name] = undefined;
+        return;
+      }
+      if ((typeof fieldData).localeCompare(type) !== 0) throw new Error();
       registry[name] = fieldData;
     });
     registry.id = RegistryBuilder.getNextId();
