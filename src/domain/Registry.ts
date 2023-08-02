@@ -1,5 +1,5 @@
+import { ObjToMap } from "../utils/ObjToMap";
 import { Field } from "./Field";
-import { Table } from "./Table";
 
 export type Registry = any;
 
@@ -18,5 +18,17 @@ export abstract class RegistryBuilder {
     });
     registry.id = id;
     return registry;
+  }
+
+  static update(schema: Field[], data: any, registry: Registry): void {
+    const newFields = ObjToMap.convert<string | number>(data);
+    newFields.forEach((value, key) => {
+      const field = schema.find(
+        ({ name }) => name.localeCompare(key) === 0
+      );
+      if (!field) return;
+      if ((typeof value).localeCompare(field.type) !== 0) throw new Error();
+      registry[key] = value;
+    });
   }
 }

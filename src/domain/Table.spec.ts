@@ -83,6 +83,19 @@ describe("integration tests for Table class", () => {
     expect(table.getRegistries().length).toEqual(1);
   });
 
+  test("ensure not update a registry with invalid age", () => {
+    const table = generateTable();
+    const response = table.update(1, {
+      age: "age",
+    });
+    expect(response).toEqual("0 lines affected");
+    const registries = table.getRegistries();
+    expect(registries.length).toEqual(1);
+    expect(registries[0].id).toEqual(1);
+    expect(registries[0].name).toEqual("name");
+    expect(registries[0].age).toEqual(24);
+  });
+
   test("ensure update a registry", () => {
     const table = generateTable();
     const response = table.update(1, {

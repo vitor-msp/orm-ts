@@ -49,11 +49,12 @@ export class Table {
   update(id: number, dto: any): string {
     const registry = this.find(id);
     if (!registry) return "0 lines affected";
-    const newFields = ObjToMap.convert<string | number>(dto);
-    newFields.forEach((value, key) => {
-      registry[key] = value;
-    });
-    return "1 line affected";
+    try {
+      RegistryBuilder.update(this.fields, dto, registry);
+      return "1 line affected";
+    } catch (error) {
+      return "0 lines affected";
+    }
   }
 
   delete(id: number): string {
