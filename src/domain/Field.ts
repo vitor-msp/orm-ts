@@ -16,6 +16,9 @@ export class Field {
     this.name = name;
     this.type = type;
     if (props.nullable) this.nullable = props.nullable;
-    if (props.pk) this.pk = props.pk;
+    if (props.pk) {
+      this.pk = props.pk;
+      this.nullable = false;
+    }
   }
 }

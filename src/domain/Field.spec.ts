@@ -18,12 +18,25 @@ describe("unit tests for Field class", () => {
       name: "field",
       type: "text",
       nullable: true,
-      pk: true,
+      pk: false,
     };
     const field = new Field(fieldProps);
     expect(field.name).toEqual(fieldProps.name);
     expect(field.type).toEqual(fieldProps.type);
     expect(field.nullable).toBeTruthy();
+    expect(field.pk).toBeFalsy();
+  });
+
+  test("ensure set nulablle automatically when field is pk", () => {
+    const fieldProps: FieldProps = {
+      name: "field",
+      type: "text",
+      pk: true,
+    };
+    const field = new Field(fieldProps);
+    expect(field.name).toEqual(fieldProps.name);
+    expect(field.type).toEqual(fieldProps.type);
+    expect(field.nullable).toBeFalsy();
     expect(field.pk).toBeTruthy();
   });
 });
