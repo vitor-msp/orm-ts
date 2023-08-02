@@ -92,4 +92,20 @@ describe("integration tests for Table class", () => {
     expect(registries[0].name).toEqual("edited");
     expect(registries[0].age).toEqual(24);
   });
+
+  test("ensure that delete not found inexistent registry", () => {
+    const table = generateTable();
+    const response = table.delete(2);
+    expect(response).toEqual("0 lines affected");
+    const registries = table.getRegistries();
+    expect(registries.length).toEqual(1);
+  });
+
+  test("ensure delete a registry", () => {
+    const table = generateTable();
+    const response = table.delete(1);
+    expect(response).toEqual("1 line affected");
+    const registries = table.getRegistries();
+    expect(registries.length).toEqual(0);
+  });
 });
