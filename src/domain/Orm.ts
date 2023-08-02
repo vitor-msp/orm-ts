@@ -11,16 +11,15 @@ export class ORM {
     return table;
   }
 
-  getTable(tableName: string): string {
-    const table = this.table(tableName);
-    return JSON.stringify(table);
-  }
-
   table(tableName: string): Table {
     const table = this.tables.find(
       (table) => table.tableName.localeCompare(tableName) === 0
     );
     if (!table) throw new Error();
     return table;
+  }
+
+  getTables(): Table[] {
+    return this.tables;
   }
 }
