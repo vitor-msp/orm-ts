@@ -124,4 +124,16 @@ describe("integration tests for Table class", () => {
     );
     expect(table.getRegistries().length).toEqual(1);
   });
+
+  test("ensure get table schema", () => {
+    const schema = generateTable().getSchema();
+    expect(schema).toEqual({
+      tableName: "table",
+      fields: [
+        { name: "id", type: "number", nullable: false, pk: true },
+        { name: "name", type: "string", nullable: false, pk: false },
+        { name: "age", type: "number", nullable: true, pk: false },
+      ],
+    });
+  });
 });

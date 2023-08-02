@@ -2,6 +2,16 @@ import { ObjToMap } from "../utils/ObjToMap";
 import { Field, FieldProps } from "./Field";
 import { Registry, RegistryBuilder } from "./Registry";
 
+export type SchemaDto = {
+  tableName: string;
+  fields: {
+    name: string;
+    type: "string" | "number";
+    nullable: boolean;
+    pk: boolean;
+  }[];
+};
+
 export class Table {
   readonly tableName: string;
   private readonly fields: Field[] = [];
@@ -64,6 +74,20 @@ export class Table {
 
   getRegistries(): Registry[] {
     return this.registries;
+  }
+
+  getSchema(): SchemaDto {
+    return {
+      tableName: this.tableName,
+      fields: this.getFields().map(({ name, nullable, pk, type }) => {
+        return {
+          name,
+          type,
+          nullable,
+          pk,
+        };
+      }),
+    };
   }
 
   private find(id: number): any {

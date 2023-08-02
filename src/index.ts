@@ -11,15 +11,18 @@ const orm = new ORM();
     .field({ name: "name", type: "string", nullable: false })
     .field({ name: "value", type: "number", nullable: false })
     .field({ name: "unit", type: "string", nullable: false });
-  console.log(orm.table("products").selectMany());
+  console.log(orm.table("products").getSchema());
 })();
 /* returns: 
-[
-    { name: "id", type: "number", nullable: false, pk: true },
-    { name: "name", type: "string", nullable: false },
-    { name: "value", type: "number", nullable: false },
-    { name: "unit", type: "string", nullable: false }
-]
+{
+    tableName: "products",
+    fields: [
+        { name: "id", type: "number", nullable: false, pk: true },
+        { name: "name", type: "string", nullable: false },
+        { name: "value", type: "number", nullable: false },
+        { name: "unit", type: "string", nullable: false }
+    ]
+}
 */
 console.log(
   orm.table("products").insert({ name: "apple", value: 5.49, unit: "kg" })
