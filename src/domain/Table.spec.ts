@@ -73,4 +73,23 @@ describe("integration tests for Table class", () => {
     const response = table.select(2, {});
     expect(response).toEqual("");
   });
+
+  test("ensure that update not found inexistent registry", () => {
+    const table = generateTable();
+    const response = table.update(2, {});
+    expect(response).toEqual("0 lines affected");
+  });
+
+  test("ensure update a registry", () => {
+    const table = generateTable();
+    const response = table.update(1, {
+      name: "edited",
+    });
+    expect(response).toEqual("1 line affected");
+    const registries = table.getRegistries();
+    expect(registries.length).toEqual(1);
+    expect(registries[0].id).toEqual(1);
+    expect(registries[0].name).toEqual("edited");
+    expect(registries[0].age).toEqual(24);
+  });
 });
