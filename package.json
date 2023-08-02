@@ -5,7 +5,7 @@
   "main": "orm.ts",
   "scripts": {
     "test": "jest",
-    "start": "rm -rf build && tsc && node build/index.js"
+    "start": "rm -rf build && tsc && node build/src/index.js"
   },
   "author": "",
   "license": "ISC",
