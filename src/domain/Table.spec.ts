@@ -66,18 +66,21 @@ describe("integration tests for Table class", () => {
         id: 1,
       })
     );
+    expect(table.getRegistries().length).toEqual(1);
   });
 
   test("ensure that select not found inexistent registry", () => {
     const table = generateTable();
     const response = table.select(2, {});
     expect(response).toEqual("");
+    expect(table.getRegistries().length).toEqual(1);
   });
 
   test("ensure that update not found inexistent registry", () => {
     const table = generateTable();
     const response = table.update(2, {});
     expect(response).toEqual("0 lines affected");
+    expect(table.getRegistries().length).toEqual(1);
   });
 
   test("ensure update a registry", () => {
