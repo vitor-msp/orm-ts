@@ -100,15 +100,28 @@ describe("integration tests for Table class", () => {
     const table = generateTable();
     const response = table.delete(2);
     expect(response).toEqual("0 lines affected");
-    const registries = table.getRegistries();
-    expect(registries.length).toEqual(1);
+    expect(table.getRegistries().length).toEqual(1);
   });
 
   test("ensure delete a registry", () => {
     const table = generateTable();
     const response = table.delete(1);
     expect(response).toEqual("1 line affected");
-    const registries = table.getRegistries();
-    expect(registries.length).toEqual(0);
+    expect(table.getRegistries().length).toEqual(0);
+  });
+
+  test("ensure select all registries", () => {
+    const table = generateTable();
+    const response = table.selectMany();
+    expect(response).toEqual(
+      JSON.stringify([
+        {
+          name: "name",
+          age: 24,
+          id: 1,
+        },
+      ])
+    );
+    expect(table.getRegistries().length).toEqual(1);
   });
 });
