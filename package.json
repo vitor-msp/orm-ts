@@ -1,0 +1,15 @@
+{
+  "name": "orm-ts",
+  "version": "1.0.0",
+  "description": "simple orm in TypeScript",
+  "main": "orm.ts",
+  "scripts": {
+    "test": "jest",
+    "start": "rm -rf build && tsc && node build/orm.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
