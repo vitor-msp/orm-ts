@@ -12,13 +12,16 @@ export class Field {
   readonly pk: boolean = false;
 
   constructor(props: FieldProps) {
-    const { name, type } = props;
-    this.name = name;
-    this.type = type;
-    if (typeof props.nullable === "boolean") this.nullable = props.nullable;
+    this.name = props.name;
+    this.type = props.type;
+    if (this.isValidNullable(props)) this.nullable = props.nullable!;
     if (props.pk) {
       this.pk = props.pk;
       this.nullable = false;
     }
+  }
+
+  private isValidNullable(props: FieldProps): boolean {
+    return typeof props.nullable === "boolean";
   }
 }
