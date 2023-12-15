@@ -12,6 +12,12 @@ export type SchemaDto = {
   }[];
 };
 
+enum ReturnMessages {
+  OneLineAffected = "1 line affected",
+  ZeroLineAffected = "0 lines affected",
+  Empty = "",
+}
+
 export class Table {
   readonly tableName: string;
   private readonly fields: Field[] = [];
@@ -22,51 +28,70 @@ export class Table {
     this.tableName = tableName;
   }
 
-  field(dto: FieldProps): Table {
-    const field = new Field(dto);
+  field(fieldProps: FieldProps): Table {
+    const field = new Field(fieldProps);
     this.fields.push(field);
     return this;
   }
 
-  insert(dto: any): string {
+  insert(registryData: any): string {
     const id = this.getNextId();
-    const registry = new RegistryBuilder(this.fields).create(dto, id);
+    const registry = new RegistryBuilder(this.fields).create(registryData, id);
     this.registries.push(registry);
-    return "1 line affected";
+    return ReturnMessages.OneLineAffected;
   }
 
-  select(id: number, show: any): string {
-    const registry = this.find(id);
-    if (!registry) return "";
-    const registryView: any = { ...registry };
-    const showMap = ObjToMap.convert<boolean>(show);
-    showMap.forEach((value, key) => {
-      if (!value) delete registryView[key];
-    });
-    return JSON.stringify(registryView);
+  private getNextId(): number {
+    return this.currentId++;
   }
 
-  update(id: number, dto: any): string {
-    const registry = this.find(id);
-    if (!registry) return "0 lines affected";
+  select(id: number, fieldsToReturn: any): string {
+    const registry = this.findRegistry(id);
+    if (!registry) return ReturnMessages.Empty;
+    const registryToReturn: any = { ...registry };
+    const fieldsToReturnMap = ObjToMap.convert<boolean>(fieldsToReturn);
+    fieldsToReturnMap.forEach((value, key) =>
+      this.deleteFieldsToNotReturn(value, key, registryToReturn)
+    );
+    return JSON.stringify(registryToReturn);
+  }
+
+  private findRegistry(id: number): any {
+    return this.registries.find((registry) => registry.id === id);
+  }
+
+  private deleteFieldsToNotReturn(
+    value: boolean,
+    key: string,
+    registryToReturn: any
+  ): void {
+    if (!value) delete registryToReturn[key];
+  }
+
+  update(id: number, registryData: any): string {
+    const registry = this.findRegistry(id);
+    if (!registry) return ReturnMessages.ZeroLineAffected;
     try {
-      new RegistryBuilder(this.fields).update(dto, registry);
-      return "1 line affected";
+      new RegistryBuilder(this.fields).update(registryData, registry);
+      return ReturnMessages.OneLineAffected;
     } catch (error) {
-      return "0 lines affected";
+      return ReturnMessages.ZeroLineAffected;
     }
   }
 
   delete(id: number): string {
-    const index = this.registries.findIndex((registry) => registry.id === id);
-    if (index === -1) return "0 lines affected";
-    this.registries.splice(index, 1);
-    return "1 line affected";
+    const registryIndex = this.findResgitryIndex(id);
+    if (registryIndex === -1) return ReturnMessages.ZeroLineAffected;
+    this.registries.splice(registryIndex, 1);
+    return ReturnMessages.OneLineAffected;
+  }
+
+  private findResgitryIndex(id: number): number {
+    return this.registries.findIndex((registry) => registry.id === id);
   }
 
   selectMany(): string {
-    const registries = this.registries.map((r) => r);
-    return JSON.stringify(registries);
+    return JSON.stringify(this.registries);
   }
 
   getFields(): Field[] {
@@ -89,13 +114,5 @@ export class Table {
         };
       }),
     };
-  }
-
-  private find(id: number): any {
-    return this.registries.find((registry) => registry.id === id);
-  }
-
-  private getNextId(): number {
-    return this.currentId++;
   }
 }

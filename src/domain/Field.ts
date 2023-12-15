@@ -11,12 +11,12 @@ export class Field {
   readonly nullable: boolean = true;
   readonly pk: boolean = false;
 
-  constructor(props: FieldProps) {
-    this.name = props.name;
-    this.type = props.type;
-    if (this.isValidNullable(props)) this.nullable = props.nullable!;
-    if (props.pk) {
-      this.pk = props.pk;
+  constructor(fieldProps: FieldProps) {
+    this.name = fieldProps.name;
+    this.type = fieldProps.type;
+    if (this.isValidNullable(fieldProps)) this.nullable = fieldProps.nullable!;
+    if (fieldProps.pk) {
+      this.pk = fieldProps.pk;
       this.nullable = false;
     }
   }
