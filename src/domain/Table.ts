@@ -30,7 +30,7 @@ export class Table {
 
   insert(dto: any): string {
     const id = this.getNextId();
-    const registry = RegistryBuilder.build(this.fields, dto, id);
+    const registry = new RegistryBuilder(this.fields).create(dto, id);
     this.registries.push(registry);
     return "1 line affected";
   }
@@ -50,7 +50,7 @@ export class Table {
     const registry = this.find(id);
     if (!registry) return "0 lines affected";
     try {
-      RegistryBuilder.update(this.fields, dto, registry);
+      new RegistryBuilder(this.fields).update(dto, registry);
       return "1 line affected";
     } catch (error) {
       return "0 lines affected";
